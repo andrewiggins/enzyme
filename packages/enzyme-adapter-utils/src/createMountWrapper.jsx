@@ -1,38 +1,38 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { ref } from 'airbnb-prop-types';
+// import PropTypes from 'prop-types';
+// import { ref } from 'airbnb-prop-types';
 import RootFinder from './RootFinder';
 
 /* eslint react/forbid-prop-types: 0 */
 
-const stringOrFunction = PropTypes.oneOfType([PropTypes.func, PropTypes.string]);
-const makeValidElementType = (adapter) => {
-  if (!adapter) {
-    return stringOrFunction;
-  }
+// const stringOrFunction = PropTypes.oneOfType([PropTypes.func, PropTypes.string]);
+// const makeValidElementType = (adapter) => {
+//   if (!adapter) {
+//     return stringOrFunction;
+//   }
 
-  function validElementTypeRequired(props, propName, ...args) {
-    if (!adapter.isValidElementType) {
-      return stringOrFunction.isRequired(props, propName, ...args);
-    }
-    const propValue = props[propName]; // eslint-disable-line react/destructuring-assignment
-    if (adapter.isValidElementType(propValue)) {
-      return null;
-    }
-    return new TypeError(`${propName} must be a valid element type!`);
-  }
+//   function validElementTypeRequired(props, propName, ...args) {
+//     if (!adapter.isValidElementType) {
+//       return stringOrFunction.isRequired(props, propName, ...args);
+//     }
+//     const propValue = props[propName]; // eslint-disable-line react/destructuring-assignment
+//     if (adapter.isValidElementType(propValue)) {
+//       return null;
+//     }
+//     return new TypeError(`${propName} must be a valid element type!`);
+//   }
 
-  function validElementType(props, propName, ...args) {
-    const propValue = props[propName];
-    if (propValue == null) {
-      return null;
-    }
-    return validElementTypeRequired(props, propName, ...args);
-  }
-  validElementType.isRequired = validElementTypeRequired;
+//   function validElementType(props, propName, ...args) {
+//     const propValue = props[propName];
+//     if (propValue == null) {
+//       return null;
+//     }
+//     return validElementTypeRequired(props, propName, ...args);
+//   }
+//   validElementType.isRequired = validElementTypeRequired;
 
-  return validElementType;
-};
+//   return validElementType;
+// };
 
 /**
  * This is a utility component to wrap around the nodes we are
@@ -87,13 +87,13 @@ export default function createMountWrapper(node, options = {}) {
       return component;
     }
   }
-  WrapperComponent.propTypes = {
-    Component: makeValidElementType(adapter).isRequired,
-    refProp: PropTypes.oneOfType([PropTypes.string, ref()]),
-    props: PropTypes.object.isRequired,
-    wrappingComponentProps: PropTypes.object,
-    context: PropTypes.object,
-  };
+  // WrapperComponent.propTypes = {
+  //   Component: makeValidElementType(adapter).isRequired,
+  //   refProp: PropTypes.oneOfType([PropTypes.string, ref()]),
+  //   props: PropTypes.object.isRequired,
+  //   wrappingComponentProps: PropTypes.object,
+  //   context: PropTypes.object,
+  // };
   WrapperComponent.defaultProps = {
     refProp: null,
     context: null,

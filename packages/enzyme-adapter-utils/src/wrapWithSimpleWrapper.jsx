@@ -1,10 +1,10 @@
 import React from 'react';
 import { intersects } from 'semver';
-import { or, explicitNull } from 'airbnb-prop-types';
-import PropTypes from 'prop-types';
+// import { or, explicitNull } from 'airbnb-prop-types';
+// import PropTypes from 'prop-types';
 
 const propTypes = {
-  children: or([explicitNull().isRequired, PropTypes.node.isRequired]),
+//   children: or([explicitNull().isRequired, PropTypes.node.isRequired]),
 };
 
 const defaultProps = {
@@ -23,7 +23,7 @@ const Wrapper = (intersects('>= 0.14', React.version)
         return children;
       }
     }
-    SimpleClassWrapper.propTypes = propTypes;
+    // SimpleClassWrapper.propTypes = propTypes;
     SimpleClassWrapper.defaultProps = defaultProps;
     return SimpleClassWrapper;
   }

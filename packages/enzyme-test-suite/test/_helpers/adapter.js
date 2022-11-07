@@ -9,7 +9,12 @@ const { is } = require('./version');
 let Adapter = null;
 
 if (process.env.PREACT) {
-  Adapter = require('enzyme-adapter-preact-pure').default;
+  const PreactAdapter = require('enzyme-adapter-preact-pure').default;
+  Adapter = class PreactAdapterWrapper extends PreactAdapter {
+    constructor() {
+      super({simulateEventsOnComponents: true, preserveFragmentsInShallowRender: true})
+    }
+  }
 } else if (process.env.ADAPTER) {
   // eslint-disable-next-line import/no-dynamic-require
   Adapter = require(`enzyme-adapter-react-${process.env.ADAPTER}`);

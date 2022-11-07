@@ -10,7 +10,9 @@
     "clean": "rimraf build",
     "prebuild": "npm run clean",
     "build": "babel --source-maps=both test --out-dir build",
-    "test": "mocha -r init.js build/ShallowWrapper-spec.js",
+    "test": "mocha --recursive build",
+    "pretest:preact": "PREACT=true babel --source-maps=both test --out-dir build",
+    "test:preact": "PREACT=true mocha -r init.js build/ShallowWrapper-spec.js",
     "watch": "npm run build -- -w"
   },
   "repository": {
@@ -40,7 +42,7 @@
     "chai": "^4.3.4",
     "create-react-class": "^15.7.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^4.0.1",
+    "enzyme-adapter-preact-pure": "file:enzyme-adapter-preact-pure.tgz",
     "enzyme-adapter-react-16": "^1.15.7",
     "enzyme-adapter-react-helper": "^1.3.10",
     "enzyme-adapter-utils": "^1.14.1",

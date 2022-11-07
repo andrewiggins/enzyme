@@ -1255,7 +1255,7 @@ describe('shallow', () => {
 
   const Wrap = shallow;
   const Wrapper = ShallowWrapper;
-  describe.only('methods', () => {
+  describe('methods', () => {
     describeMethods(
       { Wrap, Wrapper },
       // 'deprecatedInstanceProperties',

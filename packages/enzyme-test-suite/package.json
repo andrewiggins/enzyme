@@ -6,10 +6,11 @@
   "homepage": "https://enzymejs.github.io/enzyme/",
   "scripts": {
     "lint": "eslint --ext js,jsx .",
-    "pretest": "npm run lint",
+    "pretest": "npm run build",
     "clean": "rimraf build",
     "prebuild": "npm run clean",
     "build": "babel --source-maps=both test --out-dir build",
+    "test": "cd ../../ && mocha --recursive packages/enzyme-test-suite/build",
     "watch": "npm run build -- -w"
   },
   "repository": {

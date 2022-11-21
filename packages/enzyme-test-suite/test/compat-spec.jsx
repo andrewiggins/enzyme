@@ -17,6 +17,7 @@ renderers.forEach((render) => {
   const isString = render === renderToString;
 
   describe.only(`${render.name} compat tests`, () => {
+    // Included in preact adapter tests
     it('can return mixed value HTML content', () => {
       function Button({ label }) {
         return <button type="button">{[label, null, undefined, true, false, 0, 'string']}</button>;
@@ -30,11 +31,13 @@ renderers.forEach((render) => {
       }
     });
 
+    // Included in preact adapter tests
     it('can render raw HTML elements', () => {
       const wrapper = render(<div>Hello World!</div>);
       expect(wrapper.html()).to.equal(isString ? 'Hello World!' : '<div>Hello World!</div>');
     });
 
+    // Unnecessary to include in preact adapter tests
     it('can render primitive types', () => {
       if (isString) {
         expect(render(undefined).html()).to.equal(null, 'undefined');
@@ -55,6 +58,7 @@ renderers.forEach((render) => {
     })
 
     if (!isString) {
+      // Included in preact adapter tests
       it('can return props of child component', () => {
         function ListItem({ label }) {
           return <li>{label}</li>;
@@ -71,27 +75,30 @@ renderers.forEach((render) => {
         expect(item.props()).to.deep.equal({ label: 'test' }); // No children prop
       });
 
-      // TODO: Revisit
-      it.skip('renders components that take a function as `children`', () => {
-        function Child(props) {
-          return props.children();
-        }
+      if (isShallow) {
+        // Included in preact adapter tests
+        it.only('renders components that take a function as `children`', () => {
+          function Child(props) {
+            return props.children();
+          }
 
-        function Parent(props) {
-          return <Child>{() => <div>Example</div>}</Child>;
-        }
+          function Parent(props) {
+            return <Child>{() => <div>Example</div>}</Child>;
+          }
 
-        let wrapper = render(<Parent />);
-        // console.log(wrapper.props());
-        const childrenFunc = wrapper.prop('children');
-        wrapper = render(childrenFunc());
+          let wrapper = render(<Parent />);
+          // console.log(wrapper.props());
+          const childrenFunc = wrapper.prop('children');
+          wrapper = render(childrenFunc());
 
-        expect(wrapper.text()).to.equal('Example');
-      });
+          expect(wrapper.text()).to.equal('Example');
+        });
+      }
 
       // The purpose of this test was to see what Enzyme passed to
       // nodeToElement. Log the arguments of ReactSixteenAdapter.js
       // nodeToElement to understand what was passed to it.
+      // Included in preact adapter tests
       it('nodeToElement accepts all kinds of RST types', () => {
         /** @returns {any} */
         function App() {
@@ -107,7 +114,8 @@ renderers.forEach((render) => {
         }
       });
 
-      it.only('properly exposes nested fragments', () => {
+      // Included in preact adapter tests
+      it('properly exposes nested fragments', () => {
         function App() {
           return (
             <Fragment key="1">
@@ -192,6 +200,40 @@ renderers.forEach((render) => {
           expect(wrapper.findWhere(w => w.type() === Fragment).length).to.equal(1);
         }
       })
+
+      // Included in preact adapter tests
+      it('can test if result contains subtree', () => {
+        function ListItem({ label }) {
+          return <b>{label}</b>;
+        }
+        function List() {
+          return (
+            <ul>
+              <li>
+                <ListItem label="test" />
+              </li>
+            </ul>
+          );
+        }
+        const wrapper = render(<List />);
+
+        expect(wrapper.contains(<ListItem label="test" />)).to.be.true;
+        expect(
+          wrapper.contains(
+            <li>
+              <ListItem label="test" />
+            </li>
+          )
+        ).to.be.true;
+        expect(wrapper.contains(<ListItem label="foo" />)).to.be.false;
+        expect(
+          wrapper.contains(
+            <p>
+              <ListItem label="test" />
+            </p>
+          )
+        ).to.be.false;
+      });
     }
   });
 });

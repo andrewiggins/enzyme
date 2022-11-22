@@ -241,5 +241,38 @@ interactiveRenderers.forEach((render) => {
         )
       ).to.be.false;
     });
+
+    // Included in preact adapter tests
+    it('getElements() returns expected types for mixed type children', () => {
+      /** @returns {any} */
+      function App() {
+        return [undefined, null, true, false, 0, 1n, 'a string'];
+      }
+
+      const wrapper = render(<App />);
+      if (isShallow) {
+        // Old Preact shallow renderer removes unrenderables. It should preserve
+        // all returned output. It also returns the actual values instead of
+        // converting them to `null
+        //
+        // expect(wrapper.getElements()).to.equal(['0', '1', 'a string']);
+        expect(wrapper.getElements()).to.deep.equal(App().map(() => null));
+      } else {
+        // Preact adapter attaches rendered children to props.children. It shouldn't do this
+        // {
+        //   type: App,
+        //   constructor: undefined as any,
+        //   key: undefined,
+        //   ref: undefined,
+        //   props: {
+        //     children: ['0', '1', 'a string'],
+        //   },
+        // }
+        expect(wrapper.getElement()).to.deep.equal(<App />);
+        // Preact supports bigints. React does not and removes all unrenderables
+        // in the output when mount rendering
+        expect(wrapper.children().getElements()).to.deep.equal([null, null]);
+      }
+    });
   });
 });
